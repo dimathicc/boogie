@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -17,19 +18,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
-    public List<User> findAll() {
-        return userService.findAll();
+    @PostMapping
+    public User addUser(@RequestBody User user) {
+        return userService.addUser(user);
     }
 
-    @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
-        return userService.create(user);
+    @GetMapping("/{login}")
+    public Optional<User> getUser(@PathVariable String login){
+        return userService.findUserById(login);
     }
-
-    @PutMapping("/users/")
-    public User update(@RequestBody User updatedUser) {
-        return userService.update(updatedUser);
-    }
-
 }

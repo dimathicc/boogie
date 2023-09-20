@@ -5,10 +5,12 @@ import com.dimathicc.catsgram.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
 
@@ -17,18 +19,14 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/posts")
-    public List<Post> findAll() {
-        return postService.findAll();
+    @PostMapping
+    public Post addPost(@RequestBody Post post) {
+        return postService.addPost(post);
     }
 
-    @PostMapping("/post")
-    public Post create(@RequestBody Post post) {
-        return postService.create(post);
+    @GetMapping
+    public Collection<Post> findAll(@RequestParam String userId) {
+        return postService.findPostsByUser(userId);
     }
 
-    @GetMapping("/post/{postId}")
-    public Optional<Post> findById(@PathVariable int id) {
-        return postService.findById(id);
-    }
 }
