@@ -24,9 +24,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findUserById(String id) {
-        SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from cat_user where id = ?", id);
-        User user = new User();
-        user.setId(id);
-        return Optional.of(user);
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet("SELECT * FROM cat_user where id = ?", id);
+        if (userRows.next()) {
+            User user = new User(
+                    userRows.getString("id"),
+                    userRows.getString("username"),
+                    userRows.getString("nickname"));
+            return Optional.of(user);
+        } else {
+            return Optional.empty();
+        }
     }
 }
